@@ -1,4 +1,5 @@
 import React from 'react'
+import { PulseLoader } from 'react-spinners'
 import shajs from 'sha.js'
 import {
   Alert,
@@ -34,16 +35,15 @@ class BlockExample extends React.Component {
   }
 
   hash = block => shajs('sha256').update(`${block.blockNumber}${block.nonce}${block.data}`).digest('hex')
-  updateBlockNumber = event => this.setState({ ...this.state, block: { blockNumber: event.target.value } })
-  updateNonce = event => this.setState({ ...this.state, block: { nonce: event.target.value } })
-  updateData = event => this.setState({ ...this.state, block: { data: event.target.value } })
+  updateBlockNumber = event => this.setState({ block: { blockNumber: event.target.value } })
+  updateNonce = event => this.setState({ block: { nonce: event.target.value } })
+  updateData = event => this.setState({ block: { data: event.target.value } })
   valid = block => this.hash(block).substring(0, 4) === "0000"
   backgroundColor = () => this.valid(this.state.block) ? "success" : "danger"
 
   blockToMine = () => { return { blockNumber: this.state.block.blockNumber, data: this.state.block.data, nonce: 0} }
-  startMining = () => this.setState({block: this.state.block, mining: true}, this.mine)
-  mine = () => {
-    this.setState({...this.state, mining: true})
+  mine = () => this.setState({block: this.state.block, mining: true}, () => setTimeout(this.findValidNonce, 6))
+  findValidNonce = () => {
     for(var solvedBlock = this.blockToMine(); !this.valid(solvedBlock); solvedBlock.nonce++) {}
     this.setState({block: solvedBlock, mining: false})
   }
@@ -93,15 +93,18 @@ class BlockExample extends React.Component {
           </Row>
 
           <Row style={style.notTopRow}>
-            <Col xs='2'/>
+            <Col xs='2' style={style.label}>
+          </Col>
             <Col xs='9'>
-              <Button color="primary" onClick={ this.startMining }>
-                Mine
+              <Button color="primary" onClick={ this.mine }>
+                { !this.state.mining && <span>Mine</span> }
+                <PulseLoader
+                  color={'#d1e5fd'}
+                  loading={this.state.mining}
+                />
               </Button>
             </Col>
           </Row>
-
-          <h1>Mining: { `${this.state.mining}` }</h1>
         </Alert>
       </Container>
     )
