@@ -33,27 +33,18 @@ class BlockExample extends React.Component {
     }
   }
 
-  hash = (simpleBlock) => shajs('sha256').update(`${simpleBlock.blockNumber}${simpleBlock.nonce}${simpleBlock.data}`).digest('hex')
+  hash = block => shajs('sha256').update(`${block.blockNumber}${block.nonce}${block.data}`).digest('hex')
   updateBlockNumber = event => this.setState({ ...this.state, block: { blockNumber: event.target.value } })
   updateNonce = event => this.setState({ ...this.state, block: { nonce: event.target.value } })
   updateData = event => this.setState({ ...this.state, block: { data: event.target.value } })
-  valid = (simpleBlock) => this.hash(simpleBlock).substring(0, 4) === "0000"
+  valid = block => this.hash(block).substring(0, 4) === "0000"
   backgroundColor = () => this.valid(this.state.block) ? "success" : "danger"
 
+  blockToMine = () => { return { blockNumber: this.state.block.blockNumber, data: this.state.block.data, nonce: 0} }
+  startMining = () => this.setState({...this.state, mining: true}, this.mine)
   mine = () => {
-    // this.setState({...this.state, mining: true})
-
-    var simpleBlock = {
-      blockNumber: this.state.block.blockNumber,
-      nonce: 0,
-      data: this.state.block.data,
-    }
-
-    for(; !this.valid(simpleBlock); simpleBlock.nonce++) {
-      this.setState({...this.state, block: simpleBlock})
-    }
-
-    // this.setState({...this.state, mining: false})
+    for(var simpleBlock = this.blockToMine(); !this.valid(simpleBlock); simpleBlock.nonce++) {}
+    this.setState({block: simpleBlock, mining: false})
   }
 
   render() {
@@ -62,6 +53,7 @@ class BlockExample extends React.Component {
         <h1>Block</h1>
         <Alert color={ this.backgroundColor() }>
 
+        <h1>{ `${this.state.mining}` }</h1>
           <Row>
             <Col xs='2' style={style.label}>
               <Label>Block #: </Label>
@@ -103,7 +95,7 @@ class BlockExample extends React.Component {
           <Row style={style.notTopRow}>
             <Col xs='2'/>
             <Col xs='9'>
-              <Button color="primary" onClick={this.mine}>
+              <Button color="primary" onClick={ this.startMining }>
                 Mine
               </Button>
             </Col>
