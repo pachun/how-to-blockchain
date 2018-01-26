@@ -15,6 +15,7 @@ const style = {
   label: {
     textAlign: 'right',
     fontWeight: 'bold',
+    lineHeight:'30pt',
   },
   notTopRow: {
     marginTop:'20px',
@@ -26,23 +27,25 @@ class BlockExample extends React.Component {
     super()
     this.state = {
       block: {
-        blockNumber: '1',
-        nonce: '',
+        number: '1',
+        nonce: '72608',
         data: '',
       },
       mining: false,
     }
   }
 
-  hash = block => shajs('sha256').update(`${block.blockNumber}${block.nonce}${block.data}`).digest('hex')
-  updateBlockNumber = event => this.setState({ block: { blockNumber: event.target.value } })
-  updateNonce = event => this.setState({ block: { nonce: event.target.value } })
-  updateData = event => this.setState({ block: { data: event.target.value } })
+  sha256 = text => shajs('sha256').update(text).digest('hex')
+  blockAsString = block => `${block.number}${block.nonce}${block.data}`
+  hash = block => this.sha256(this.blockAsString(block))
+  updateBlockNumber = event => this.setState({ ...this.state, block: { ...this.state.block, number: event.target.value } })
+  updateNonce = event => this.setState({ ...this.state, block: { ...this.state.block, nonce: event.target.value } })
+  updateData = event => this.setState({ ...this.state, block: { ...this.state.block, data: event.target.value } })
   valid = block => this.hash(block).substring(0, 4) === "0000"
   backgroundColor = () => this.valid(this.state.block) ? "success" : "danger"
 
-  blockToMine = () => { return { blockNumber: this.state.block.blockNumber, data: this.state.block.data, nonce: 0} }
-  mine = () => this.setState({block: this.state.block, mining: true}, () => setTimeout(this.findValidNonce, 6))
+  blockToMine = () => { return { number: this.state.block.number, data: this.state.block.data, nonce: 0} }
+  mine = () => this.setState({ ...this.state, mining: true}, () => setTimeout(this.findValidNonce, 6))
   findValidNonce = () => {
     for(var solvedBlock = this.blockToMine(); !this.valid(solvedBlock); solvedBlock.nonce++) {}
     this.setState({block: solvedBlock, mining: false})
@@ -51,15 +54,15 @@ class BlockExample extends React.Component {
   render() {
     return (
       <Container>
-        <h1>Block</h1>
+        <h3>Block</h3>
         <Alert color={ this.backgroundColor() }>
 
           <Row>
             <Col xs='2' style={style.label}>
-              <Label>Block #: </Label>
+              <Label>Number: </Label>
             </Col>
             <Col xs='9'>
-              <Input onChange={this.updateBlockNumber} value={this.state.block.blockNumber}/>
+              <Input onChange={this.updateBlockNumber} value={this.state.block.number}/>
             </Col>
           </Row>
 
@@ -96,7 +99,7 @@ class BlockExample extends React.Component {
             <Col xs='2' style={style.label}>
           </Col>
             <Col xs='9'>
-              <Button color="primary" onClick={ this.mine }>
+              <Button color="primary" onClick={ this.mine } disabled={ this.state.mining }>
                 { !this.state.mining && <span>Mine</span> }
                 <PulseLoader
                   color={'#d1e5fd'}
@@ -105,6 +108,7 @@ class BlockExample extends React.Component {
               </Button>
             </Col>
           </Row>
+
         </Alert>
       </Container>
     )

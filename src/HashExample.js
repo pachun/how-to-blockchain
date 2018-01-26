@@ -2,7 +2,6 @@ import React from 'react'
 import shajs from 'sha.js'
 import {
   Alert,
-  Container,
   Col,
   Row,
   Input,
@@ -25,12 +24,12 @@ class HashExample extends React.Component {
     this.state = { data: '' }
   }
   updateData = event => this.setState({ data: event.target.value })
-  hash = () => shajs('sha256').update(this.state.data).digest('hex')
+  sha256 = text => shajs('sha256').update(text).digest('hex')
 
   render() {
     return (
-      <Container>
-        <h1>SHA 256 Hash</h1>
+      <div>
+        <h3>SHA256 Hash</h3>
         <Alert color="secondary">
 
           <Row>
@@ -41,7 +40,7 @@ class HashExample extends React.Component {
               <Input
                 type='textarea'
                 rows='10'
-                onChange={this.updateData}/>
+                onChange={ this.updateData }/>
             </Col>
           </Row>
 
@@ -52,12 +51,12 @@ class HashExample extends React.Component {
             <Col xs='9'>
               <Input
                 disabled={true}
-                value={ this.hash() }/>
+                value={ this.sha256(this.state.data) }/>
             </Col>
           </Row>
 
         </Alert>
-      </Container>
+      </div>
     )
   }
 }
