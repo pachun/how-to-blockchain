@@ -41,10 +41,11 @@ class BlockExample extends React.Component {
   backgroundColor = () => this.valid(this.state.block) ? "success" : "danger"
 
   blockToMine = () => { return { blockNumber: this.state.block.blockNumber, data: this.state.block.data, nonce: 0} }
-  startMining = () => this.setState({...this.state, mining: true}, this.mine)
+  startMining = () => this.setState({block: this.state.block, mining: true}, this.mine)
   mine = () => {
-    for(var simpleBlock = this.blockToMine(); !this.valid(simpleBlock); simpleBlock.nonce++) {}
-    this.setState({block: simpleBlock, mining: false})
+    this.setState({...this.state, mining: true})
+    for(var solvedBlock = this.blockToMine(); !this.valid(solvedBlock); solvedBlock.nonce++) {}
+    this.setState({block: solvedBlock, mining: false})
   }
 
   render() {
@@ -53,7 +54,6 @@ class BlockExample extends React.Component {
         <h1>Block</h1>
         <Alert color={ this.backgroundColor() }>
 
-        <h1>{ `${this.state.mining}` }</h1>
           <Row>
             <Col xs='2' style={style.label}>
               <Label>Block #: </Label>
@@ -101,6 +101,7 @@ class BlockExample extends React.Component {
             </Col>
           </Row>
 
+          <h1>Mining: { `${this.state.mining}` }</h1>
         </Alert>
       </Container>
     )
