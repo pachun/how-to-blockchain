@@ -1,6 +1,7 @@
 import React from 'react'
 import HashExample from './HashExample'
 import BlockExample from './BlockExample'
+import BlockchainExample from './BlockchainExample'
 import {
   Container,
   Nav,
@@ -15,17 +16,20 @@ const selectedLinkColor = '#000'
 class App extends React.Component {
   constructor() {
     super()
-    this.state = { route: 'Hash' }
+    this.state = { route: 'Blockchain' }
   }
 
   showHashExample  = () => this.setState({route: 'Hash'})
   showBlockExample = () => this.setState({route: 'Block'})
+  showBlockchainExample = () => this.setState({route: 'Blockchain'})
 
   showingHashExample  = () => this.state.route === 'Hash'
   showingBlockExample = () => this.state.route === 'Block'
+  showingBlockchainExample = () => this.state.route === 'Blockchain'
 
   HashExample  = () => this.showingHashExample() && <HashExample/>
   BlockExample = () => this.showingBlockExample() && <BlockExample/>
+  BlockchainExample = () => this.showingBlockchainExample() && <BlockchainExample/>
 
   hashExampleLinkStyle = () => { return {
     color: this.showingHashExample() ? selectedLinkColor : linkColor
@@ -54,10 +58,17 @@ class App extends React.Component {
               style={{color: this.showingBlockExample() ? '#000' : '#2f7df6'}}>
               Block
             </NavLink>
+            <NavLink
+              href="#"
+              onClick={this.showBlockchainExample}
+              style={{color: this.showingBlockchainExample() ? '#000' : '#2f7df6'}}>
+              Blockchain
+            </NavLink>
           </Nav>
         </Navbar>
         { this.HashExample() }
         { this.BlockExample() }
+        { this.BlockchainExample() }
       </Container>
     )
   }
