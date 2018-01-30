@@ -20,17 +20,17 @@ class BlockchainExample extends React.Component {
   sha256 = text => shajs('sha256').update(text).digest('hex')
   hash = block => this.sha256(this.blockAsString(block))
 
-  updateNumber = number => this.setState({ ...this.state, block: { ...this.state.block, number } })
-  updateNonce = nonce => this.setState({ ...this.state, block: { ...this.state.block, nonce } })
-  updateData = data => this.setState({ ...this.state, block: { ...this.state.block, data } })
+  updateNumber = block => number => this.setState({ ...this.state, block: { ...block, number } })
+  updateNonce = block => nonce => this.setState({ ...this.state, block: { ...block, nonce } })
+  updateData = block => data => this.setState({ ...this.state, block: { ...block, data } })
 
   valid = block => this.hash(block).substring(0, 4) === "0000"
-  backgroundColor = () => this.valid(this.state.block) ? "success" : "danger"
+  backgroundColor = block => this.valid(block) ? "success" : "danger"
 
-  blockToMine = () => { return { number: this.state.block.number, data: this.state.block.data, nonce: 0 } }
-  mine = () => this.setState({ ...this.state, block: { ...this.state.block, mining: true } }, () => setTimeout(this.findValidNonce, 1))
-  findValidNonce = () => {
-    for(var solvedBlock = this.blockToMine(); !this.valid(solvedBlock); solvedBlock.nonce++) {}
+  blockToMine = block => { return { number: block.number, data: block.data, nonce: 0 } }
+  mine = block => this.setState({ ...this.state, block: { ...block, mining: true } }, () => setTimeout(this.findValidNonce(block), 1))
+  findValidNonce = block => () => {
+    for(var solvedBlock = this.blockToMine(block); !this.valid(solvedBlock); solvedBlock.nonce++) {}
     this.setState({block: {...solvedBlock, mining: false}})
   }
 
@@ -40,9 +40,9 @@ class BlockchainExample extends React.Component {
         <h3>Blockchain</h3>
         <Block
           block={this.state.block}
-          updateNumber={this.updateNumber}
-          updateNonce={this.updateNonce}
-          updateData={this.updateData}
+          updateNumber={this.updateNumber(this.state.block)}
+          updateNonce={this.updateNonce(this.state.block)}
+          updateData={this.updateData(this.state.block)}
           hash={this.hash}
           mine={this.mine}
           backgroundColor={this.backgroundColor}

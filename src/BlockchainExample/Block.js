@@ -23,7 +23,7 @@ const style = {
 const update = updateFunction => event => updateFunction(event.target.value)
 
 const Block = ({ block, updateNumber, updateNonce, updateData, mine, mining, hash, backgroundColor }) =>
-  <Alert color={ backgroundColor() }>
+  <Alert color={ backgroundColor(block) }>
     <Row>
       <Col xs='2' style={ style.label }>
         <Label>Number: </Label>
