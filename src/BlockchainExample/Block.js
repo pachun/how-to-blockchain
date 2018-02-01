@@ -22,7 +22,7 @@ const style = {
 
 const update = updateFunction => event => updateFunction(event.target.value)
 
-const Block = ({ block, updateNumber, updateNonce, updateData, mine, mining, hash, backgroundColor }) =>
+const Block = ({ block, updateNumber, updateNonce, updateData, mine, mining, hash, parentHash, backgroundColor }) =>
   <Alert color={ backgroundColor(block) }>
     <Row>
       <Col xs='2' style={ style.label }>
@@ -50,6 +50,15 @@ const Block = ({ block, updateNumber, updateNonce, updateData, mine, mining, has
         <Input
           type='textarea' rows='10'
           onChange={ update(updateData) } value={ block.data }/>
+      </Col>
+    </Row>
+
+    <Row style={ style.notTopRow }>
+      <Col xs='2' style={ style.label }>
+        <Label>Parent Hash: </Label>
+      </Col>
+      <Col xs='9'>
+        <Input disabled={ true } value={ block.parentHash() }/>
       </Col>
     </Row>
 

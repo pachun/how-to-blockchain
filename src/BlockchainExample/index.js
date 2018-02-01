@@ -10,19 +10,21 @@ class BlockchainExample extends React.Component {
     this.state = {
       blocks: [{
         number: '1',
-        nonce: '72608',
-        data: '',
+        nonce: '18012',
+        data: 'Genesis',
         mining: false,
+        parentHash: () => '¯\\_(ツ)_/¯',
       },{
         number: '2',
-        nonce: '72608',
+        nonce: '27320',
         data: '',
         mining: false,
+        parentHash: () => this.hash(this.state.blocks[0]),
       }],
     }
   }
 
-  blockAsString = block => `${block.number}${block.nonce}${block.data}`
+  blockAsString = block => `${block.number}${block.nonce}${block.data}${block.parentHash()}`
   sha256 = text => shajs('sha256').update(text).digest('hex')
   hash = block => this.sha256(this.blockAsString(block))
 
@@ -43,7 +45,10 @@ class BlockchainExample extends React.Component {
   valid = block => this.hash(block).substring(0, 4) === "0000"
   backgroundColor = block => this.valid(block) ? "success" : "danger"
 
-  blockToMine = block => { return { number: block.number, data: block.data, nonce: 0 } }
+  blockToMine = index => {
+    const block = this.state.blocks[index]
+    return { ...block, nonce: 0 }
+  }
 
   mine = index => () => this.setState(
     update(this.state, {blocks: {[index]: {$set: this.newBlock(index, {mining: true})}}}),
@@ -51,7 +56,7 @@ class BlockchainExample extends React.Component {
   )
 
   findValidNonce = (index) => () => {
-    for(var solvedBlock = this.blockToMine(this.state.blocks[index]); !this.valid(solvedBlock); solvedBlock.nonce++) {}
+    for(var solvedBlock = this.blockToMine(index); !this.valid(solvedBlock); solvedBlock.nonce++) {}
     this.setState(update(this.state, {blocks: {[index]: {$set: this.newBlock(index, {...solvedBlock, mining: false})}}}))
   }
 
