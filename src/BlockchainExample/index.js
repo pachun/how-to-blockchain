@@ -1,6 +1,6 @@
 import React from 'react'
 import update from 'immutability-helper'
-import { Container } from 'reactstrap'
+import { Button, Container } from 'reactstrap'
 import shajs from 'sha.js'
 import Block from './Block'
 
@@ -20,12 +20,6 @@ class BlockchainExample extends React.Component {
         data: '',
         mining: false,
         parentHash: () => this.hash(this.state.blocks[0]),
-      },{
-        number: '3',
-        nonce: '',
-        data: '',
-        mining: false,
-        parentHash: () => this.hash(this.state.blocks[1]),
       }],
     }
   }
@@ -66,24 +60,40 @@ class BlockchainExample extends React.Component {
     this.setState(update(this.state, {blocks: {[index]: {$set: this.newBlock(index, {...solvedBlock, mining: false})}}}))
   }
 
+  removeBlock = () => this.setState({ blocks: this.state.blocks.splice(0, this.state.blocks.length-1) })
+
+  addBlock = () => {
+    const index = this.state.blocks.length - 1
+    this.setState({blocks: [
+    ...this.state.blocks,
+    {
+      number: parseInt(this.state.blocks[index].number) + 1,
+      nonce: '0',
+      data: '',
+      mining: false,
+      parentHash: () => this.hash(this.state.blocks[index]),
+    },
+    ]})
+  }
+
   render() {
     return (
       <Container>
         <h3>Blockchain</h3>
-        <div>
-          <div>
-            { this.state.blocks.map( (block, index) =>
-              <Block
-                block={block}
-                updateNumber={this.updateNumber(index)}
-                updateNonce={this.updateNonce(index)}
-                updateData={this.updateData(index)}
-                hash={this.hash}
-                mine={this.mine(index)}
-                backgroundColor={this.backgroundColor}
-              />
-            ) }
-          </div>
+        { this.state.blocks.map( (block, index) =>
+          <Block
+            block={block}
+            updateNumber={this.updateNumber(index)}
+            updateNonce={this.updateNonce(index)}
+            updateData={this.updateData(index)}
+            hash={this.hash}
+            mine={this.mine(index)}
+            backgroundColor={this.backgroundColor}
+          />
+        ) }
+        <div style={{marginBottom:'50px', maxWidth: '500px', display:'flex',justifyContent:'space-between'}}>
+          <Button color="primary" onClick={this.addBlock}>Add Block</Button>
+          { this.state.blocks.length > 1 && <Button color="danger" onClick={this.removeBlock}>Remove Block</Button>}
         </div>
       </Container>
     )

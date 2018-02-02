@@ -74,7 +74,7 @@ const Block = ({ block, updateNumber, updateNonce, updateData, mine, mining, has
     <Row style={ style.notTopRow }>
       <Col xs='4'/>
       <Col xs='8'>
-        <Button color="primary" onClick={ mine } disabled={ block.mining }>
+        <Button color="secondary" onClick={ mine } disabled={ block.mining }>
           { !block.mining && <span>Mine</span> }
           <PulseLoader
             color={'#d1e5fd'}
