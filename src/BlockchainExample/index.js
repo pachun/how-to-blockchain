@@ -20,6 +20,12 @@ class BlockchainExample extends React.Component {
         data: '',
         mining: false,
         parentHash: () => this.hash(this.state.blocks[0]),
+      },{
+        number: '3',
+        nonce: '',
+        data: '',
+        mining: false,
+        parentHash: () => this.hash(this.state.blocks[1]),
       }],
     }
   }
@@ -64,17 +70,21 @@ class BlockchainExample extends React.Component {
     return (
       <Container>
         <h3>Blockchain</h3>
-        { this.state.blocks.map( (block, index) =>
-          <Block
-            block={block}
-            updateNumber={this.updateNumber(index)}
-            updateNonce={this.updateNonce(index)}
-            updateData={this.updateData(index)}
-            hash={this.hash}
-            mine={this.mine(index)}
-            backgroundColor={this.backgroundColor}
-          />
-        ) }
+        <div class="container-fluid" style={{display:'flex',overflow:'auto'}}>
+          <div class="row flex-row flex-nowrap">
+            { this.state.blocks.map( (block, index) =>
+              <Block
+                block={block}
+                updateNumber={this.updateNumber(index)}
+                updateNonce={this.updateNonce(index)}
+                updateData={this.updateData(index)}
+                hash={this.hash}
+                mine={this.mine(index)}
+                backgroundColor={this.backgroundColor}
+              />
+            ) }
+          </div>
+        </div>
       </Container>
     )
   }
