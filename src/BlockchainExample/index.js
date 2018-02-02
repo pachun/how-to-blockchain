@@ -70,8 +70,8 @@ class BlockchainExample extends React.Component {
     return (
       <Container>
         <h3>Blockchain</h3>
-        <div class="container-fluid" style={{display:'flex',overflow:'auto'}}>
-          <div class="row flex-row flex-nowrap">
+        <div>
+          <div>
             { this.state.blocks.map( (block, index) =>
               <Block
                 block={block}
