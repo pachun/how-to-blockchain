@@ -52,7 +52,7 @@ class App extends React.Component {
       <Container style={{fontFamily:'Helvetica',marginBottom:'70px'}}>
         <Navbar style={{marginBottom: '50px'}}>
           <NavbarBrand style={{fontSize:'20pt'}}>
-            Blockchain Demo
+            How Blockchains Work
           </NavbarBrand>
           <Nav>
             <NavLink
