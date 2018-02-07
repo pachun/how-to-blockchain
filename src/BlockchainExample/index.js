@@ -14,12 +14,6 @@ class BlockchainExample extends React.Component {
         data: 'Genesis',
         mining: false,
         parentHash: () => '¯\\_(ツ)_/¯',
-      },{
-        number: '2',
-        nonce: '27320',
-        data: '',
-        mining: false,
-        parentHash: () => this.hash(this.state.blocks[0]),
       }],
     }
   }

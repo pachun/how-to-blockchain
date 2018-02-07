@@ -16,7 +16,7 @@ const selectedLinkColor = '#000'
 class App extends React.Component {
   constructor() {
     super()
-    this.state = { route: 'Block' }
+    this.state = { route: 'Hash' }
   }
 
   showHashExample  = () => this.setState({route: 'Hash'})
@@ -27,9 +27,18 @@ class App extends React.Component {
   showingBlockExample = () => this.state.route === 'Block'
   showingBlockchainExample = () => this.state.route === 'Blockchain'
 
-  HashExample  = () => this.showingHashExample() && <HashExample/>
+  HashExample  = () => this.showingHashExample() && <HashExample next={this.showHashExample}/>
   BlockExample = () => this.showingBlockExample() && <BlockExample/>
   BlockchainExample = () => this.showingBlockchainExample() && <BlockchainExample/>
+
+  nextSection = (e) => {
+    e.preventDefault()
+    if (this.showingHashExample()) {
+      this.showBlockExample()
+    } else {
+      this.showBlockchainExample()
+    }
+  }
 
   hashExampleLinkStyle = () => { return {
     color: this.showingHashExample() ? selectedLinkColor : linkColor
@@ -69,6 +78,7 @@ class App extends React.Component {
         { this.HashExample() }
         { this.BlockExample() }
         { this.BlockchainExample() }
+        { !this.showingBlockchainExample() && <p><a href="" onClick={this.nextSection}>Done testing the waters here? Onward!</a></p> }
       </Container>
     )
   }
