@@ -98,7 +98,7 @@ class BlockExample extends React.Component {
           <p>Finding a nonce that makes a block's hash begin with four zeroes can be time consuming (while the mine button wobbles and loads).</p>
           <p>Testing whether a block's hash begins with four zeros is very quick.</p>
           <p>You can verify this by watching the hash update immediately every time you type a new character into any of the block's fields.</p>
-          <p>Because nonces are can take time to discover, but are quick to validate, they are also called a <em>proof of work</em>.</p>
+          <p>Since a nonce takes a long time to discover and is quickly validated, it is also called a <em>proof of work</em>.</p>
         </div>
         <Alert color={ this.backgroundColor() }>
 
