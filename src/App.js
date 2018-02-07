@@ -17,7 +17,7 @@ const selectedLinkColor = '#000'
 class App extends React.Component {
   constructor() {
     super()
-    this.state = { route: 'Hash' }
+    this.state = { route: 'Blockchain' }
   }
 
   showHashExample  = () => this.setState({route: 'Hash'})
