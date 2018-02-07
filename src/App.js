@@ -3,6 +3,7 @@ import HashExample from './HashExample'
 import BlockExample from './BlockExample'
 import BlockchainExample from './BlockchainExample'
 import {
+  Button,
   Container,
   Nav,
   Navbar,
@@ -31,8 +32,7 @@ class App extends React.Component {
   BlockExample = () => this.showingBlockExample() && <BlockExample/>
   BlockchainExample = () => this.showingBlockchainExample() && <BlockchainExample/>
 
-  nextSection = (e) => {
-    e.preventDefault()
+  nextSection = () => {
     if (this.showingHashExample()) {
       this.showBlockExample()
     } else {
@@ -49,7 +49,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <Container style={{fontFamily:'Helvetica'}}>
+      <Container style={{fontFamily:'Helvetica',marginBottom:'70px'}}>
         <Navbar style={{marginBottom: '50px'}}>
           <NavbarBrand style={{fontSize:'20pt'}}>
             Blockchain Demo
@@ -78,7 +78,7 @@ class App extends React.Component {
         { this.HashExample() }
         { this.BlockExample() }
         { this.BlockchainExample() }
-        { !this.showingBlockchainExample() && <p><a href="" onClick={this.nextSection}>Done testing the waters here? Onward!</a></p> }
+        { !this.showingBlockchainExample() && <Button style={{float:'right'}}color="info" onClick={this.nextSection}>Done testing the waters here? Onward!</Button> }
       </Container>
     )
   }
