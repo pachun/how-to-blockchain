@@ -10,6 +10,7 @@ import {
   Input,
   Label,
 } from 'reactstrap'
+import faces from './faces'
 
 const style = {
   label: {
@@ -28,8 +29,8 @@ class BlockExample extends React.Component {
     this.state = {
       block: {
         number: '1',
-        nonce: '72608',
-        data: '',
+        nonce: '',
+        data: 'ʕ•ᴥ•ʔ',
       },
       mining: false,
     }
@@ -51,10 +52,54 @@ class BlockExample extends React.Component {
     this.setState({block: solvedBlock, mining: false})
   }
 
+  randomData = () => faces[Math.floor(Math.random() * 161)]
+
+  updateDataRandomly = () => this.setState({ block: { ...this.state.block, data: this.randomData() } })
+
+  showValidBlock = () => this.setState({block: {number: '1', nonce: '72608', data: ''}})
+
+  blockAsStringInstructions = block => <p>hash({ this.blockAsString(block) }) = { this.hash(block) }</p>
+
+  mineButton = () => <Button color="primary" onClick={ this.mine } disabled={ this.state.mining }>
+      { !this.state.mining && <span>Mine</span> }
+      <PulseLoader
+        color={'#d1e5fd'}
+        loading={this.state.mining}
+      />
+    </Button>
+
   render() {
     return (
       <Container>
         <h3>Block</h3>
+        <div style={{marginBottom:'30px',marginTop:'30px'}}>
+          <p>
+            A blockchain is an ordered list of blocks. Each block has a number, nonce, data, and hash.
+          </p>
+          <h5>number</h5>
+          <p>
+            This block's position within the ordered list of blocks <code>[1, 2, 3, 4, 5, ..., last block's number]</code>
+          </p>
+          <h5>data</h5>
+          <p>
+            Anything. Cryptocurrency has transactions here.
+          </p>
+          <h5>hash</h5>
+          <p>
+            A hash of the <a href="https://en.wikipedia.org/wiki/Concatenation" target="_blank">concatenation</a> of all the parts of the block.
+          </p>
+          { this.blockAsStringInstructions(this.state.block) }
+          <h5>nonce</h5>
+          <p>A block is valid (green) when its hash begins with four zeroes. Otherwise, the block is invalid.</p>
+          <p>Clicking { this.mineButton() } will set the <em>nonce</em> to zero and increment it until the hash begins with four zeroes.</p>
+          <p><a href="" onClick={(e) => { e.preventDefault(); this.updateDataRandomly() }}>
+            Changing the data after finding a nonce will likely invalidate the block again
+          </a>.</p>
+          <p>Finding a nonce that makes a block's hash begin with four zeroes can be time consuming (while the mine button wobbles and loads).</p>
+          <p>Testing whether a block's hash begins with four zeros is very quick.</p>
+          <p>You can verify this by watching the hash update immediately every time you type a new character into any of the block's fields.</p>
+          <p>Because nonces are can take time to discover, but are quick to validate, they are also called a <em>proof of work</em>.</p>
+        </div>
         <Alert color={ this.backgroundColor() }>
 
           <Row>
@@ -99,13 +144,7 @@ class BlockExample extends React.Component {
             <Col xs='2' style={style.label}>
           </Col>
             <Col xs='9'>
-              <Button color="primary" onClick={ this.mine } disabled={ this.state.mining }>
-                { !this.state.mining && <span>Mine</span> }
-                <PulseLoader
-                  color={'#d1e5fd'}
-                  loading={this.state.mining}
-                />
-              </Button>
+              { this.mineButton() }
             </Col>
           </Row>
 
