@@ -130,10 +130,10 @@ class BlockchainExample extends React.Component {
         <p>They initially show up invalid, since their hashes don't begin with four zeroes.</p>
         <p>If you mine them in order without changing them, you can make all the blocks in the chain valid.</p>
         <p>Try <a href="" onClick={(e) => { e.preventDefault(); this.addABunchOfBlocks()}}>adding a bunch of blocks</a> and then changing one in the middle. See what it does to the rest?</p>
-        <p>It's easy to see if one of the blocks in the blockchain has been tampered with since a subsequent block has been mined.</p>
+        <p>It's easy to see if one of the blocks in the chain has been tampered with because it and all subsequent blocks become invalid.</p>
         <p>Practical applications of the blockchain keep copies on everyone in the network's computer.</p>
         <p>When someone tries to volunteer a maliciously altered version of the blockchain, everyone else in the network will know and reject it.</p>
-        <p>I don't confidently understand the distributed part of how blockchains work. If you find a good explanation, pleaase <a href="mailto:nick@pachulski.me">email it to me</a>.</p>
+        <p>I don't confidently understand the distributed part of how blockchains work. If you find a good explanation, please <a href="mailto:nick@pachulski.me">email it to me</a>.</p>
         { this.blocks() }
         <div style={{marginBottom:'50px', maxWidth: '500px', display:'flex',justifyContent:'space-between'}}>
           { this.addBlockButton() }
